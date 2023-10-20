@@ -6,7 +6,7 @@ const Home = ({ navigation }) => {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [weight, setWeight] = useState('');
-  const [registering, setRegistering] = useState(false); // Nuevo estado para controlar la pantalla de carga
+  const [registering, setRegistering] = useState(false);
 
   const handleNameChange = text => {
     setName(text);
@@ -25,19 +25,19 @@ const Home = ({ navigation }) => {
   };
 
   const handleRegister = () => {
-    setRegistering(true); // Iniciar la pantalla de carga
+    setRegistering(true);
     addAnimalToFirestore(name, age, weight)
       .then(() => {
-        alert(`Animal ${name} Registro exitoso!`);
-        setRegistering(false); // Finalizar la pantalla de carga
+        alert(`Animal ${name} registrado exitosamente!`);
+        setRegistering(false);
+        navigation.goBack(); // Regresar a la pantalla anterior luego del registro exitoso
       })
       .catch((error) => {
         alert('Registro fallido, inténtalo de nuevo');
         console.error(error);
-        setRegistering(false); // Finalizar la pantalla de carga en caso de error
+        setRegistering(false);
       });
   };
-
 
   return (
     <View style={styles.container}>
@@ -47,31 +47,31 @@ const Home = ({ navigation }) => {
         <>
           <Text style={styles.title}>Registro de animales</Text>
           <View style={styles.inputContainer}>
-        <TextInput
-          value={name}
-          onChangeText={handleNameChange}
-          placeholder="Nombre"
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          value={age}
-          onChangeText={handleAgeChange}
-          placeholder="Edad"
-          style={styles.input}
-          keyboardType="numeric"
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          value={weight}
-          onChangeText={handleWeightChange}
-          placeholder="Peso (kg)"
-          style={styles.input}
-          keyboardType="numeric"
-        />
-      </View>
+            <TextInput
+              value={name}
+              onChangeText={handleNameChange}
+              placeholder="Nombre"
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={age}
+              onChangeText={handleAgeChange}
+              placeholder="Edad"
+              style={styles.input}
+              keyboardType="numeric"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={weight}
+              onChangeText={handleWeightChange}
+              placeholder="Peso (kg)"
+              style={styles.input}
+              keyboardType="numeric"
+            />
+          </View>
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
             <Text style={styles.buttonText}>Registrar animal</Text>
           </TouchableOpacity>
@@ -109,15 +109,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: '80%',
     alignItems: 'center',
-  },
-  goBackButton: {
-    backgroundColor: '#f44336',
-    padding: 10,
-    borderRadius: 5,
-    width: '80%',
-    alignItems: 'center',
-    marginTop: 20,
-    borderRadius: 20,
   },
   buttonText: {
     color: 'white',

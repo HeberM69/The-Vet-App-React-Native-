@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, onSnapshot } from 'firebase/firestore';
 import { db } from './Firebase';
 import { useFocusEffect } from '@react-navigation/native';
 
 const Home = ({ navigation }) => {
   const [animals, setAnimals] = useState([]);
-  const [loading, setLoading] = useState(true); // Estado para controlar la animación de carga
+  const [loading, setLoading] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -18,9 +18,16 @@ const Home = ({ navigation }) => {
         } catch (error) {
           console.error('Error fetching animals:', error);
         }
-        setLoading(false); // Establecer loading en false una vez que los datos se han cargado
+        setLoading(false);
       };
       fetchAnimals();
+
+      const unsubscribe = onSnapshot(collection(db, 'animals'), (snapshot) => {
+        const updatedAnimals = snapshot.docs.map((doc) => doc.data());
+        setAnimals(updatedAnimals);
+      });
+
+      return () => unsubscribe(); // Clean up the listener on unmount
     }, [])
   );
 
