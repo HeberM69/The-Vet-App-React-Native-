@@ -1,36 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from './Firebase'; // Asegúrate de importar la instancia de Firebase adecuada
 
-const AnimalInfo = () => {
-  const [animals, setAnimals] = useState([]);
-
-  useEffect(() => {
-    const fetchAnimals = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'animals'));
-        const animalData = querySnapshot.docs.map((doc) => doc.data());
-        setAnimals(animalData);
-      } catch (error) {
-        console.error('Error fetching animals:', error);
-      }
-    };
-    fetchAnimals();
-  }, []);
+const AnimalInfo = ({ route }) => {
+  const { selectedAnimal } = route.params;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Información de animales</Text>
+      <Text style={styles.title}>Información del animal</Text>
       <View style={styles.infoContainer}>
-        {animals.map((animal, index) => (
-          <View key={index}>
-            <Text style={styles.infoText}>Nombre: {animal.name}</Text>
-            <Text style={styles.infoText}>Edad: {animal.age} años</Text>
-            <Text style={styles.infoText}>Peso: {animal.weight} kg</Text>
-          </View>
-        ))}
+        <Text style={styles.infoText}>Nombre: {selectedAnimal.name}</Text>
+        <Text style={styles.infoText}>Edad: {selectedAnimal.age} años</Text>
+        <Text style={styles.infoText}>Peso: {selectedAnimal.weight} kg</Text>
       </View>
+      
     </View>
   );
 };
@@ -53,10 +35,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 5,
+    marginTop: 10,
+    marginBottom: 10,
   },
   infoText: {
     fontSize: 18,
     marginBottom: 10,
+    marginTop: 10,
   },
 });
 
