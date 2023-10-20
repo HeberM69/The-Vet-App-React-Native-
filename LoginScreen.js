@@ -56,7 +56,7 @@ const Login = () => {
         />
       </View>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Iniciar sesión</Text>
+        <Text style={styles.buttonText}>Iniciar Sesión</Text>
       </TouchableOpacity>
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>
@@ -87,13 +87,14 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: 'gray',
     padding: 10,
+    borderRadius: 20,
   },
   button: {
     backgroundColor: '#2196F3',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 20,
     width: '80%',
     alignItems: 'center',
   },

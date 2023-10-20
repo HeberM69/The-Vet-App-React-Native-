@@ -1,36 +1,67 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from './Firebase';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Home = ({ navigation }) => {
+  const [animals, setAnimals] = useState([]);
+  const [loading, setLoading] = useState(true); // Estado para controlar la animación de carga
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchAnimals = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, 'animals'));
+          const animalData = querySnapshot.docs.map((doc) => doc.data());
+          setAnimals(animalData);
+        } catch (error) {
+          console.error('Error fetching animals:', error);
+        }
+        setLoading(false); // Establecer loading en false una vez que los datos se han cargado
+      };
+      fetchAnimals();
+    }, [])
+  );
+
   const handleNavigateToAnimalForm = () => {
     navigation.navigate('AnimalForm');
   };
 
-  const handleGoBack = () => {
-    navigation.goBack(); // Esta función te llevará a la página anterior
+  const handleNavigateToAnimalInformation = (animal) => {
+    navigation.navigate('AnimalInformation', { selectedAnimal: animal });
   };
 
-  const handleNavigateToAnimalInformation = () => {
-    navigation.navigate('AnimalInformation'); // Esta función te llevará a la página de información de animal
-  };
+  const renderAnimal = ({ item }) => (
+    <View style={styles.rowContainer}>
+      <Text style={styles.animalName} numberOfLines={1} ellipsizeMode="tail">
+        {item.name}
+      </Text>
+      <TouchableOpacity
+        onPress={() => handleNavigateToAnimalInformation(item)}
+        style={styles.detailButtonContainer}
+      >
+        <Text style={styles.detailButtonText}>Detalles</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>¡Bienvenido!</Text>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>
-          Registra un animal o ve los que se han registrado.
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleNavigateToAnimalForm}>
-        <Text style={styles.buttonText}>Registrar un animal</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonInfo} onPress={handleNavigateToAnimalInformation}>
-        <Text style={styles.buttonText}>Ver información del animal</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.goBackButton} onPress={handleGoBack}>
-        <Text style={styles.buttonText}>Volver</Text>
-      </TouchableOpacity>
+      {loading ? (
+        <ActivityIndicator size="large" color="#2196F3" />
+      ) : (
+        <>
+          <FlatList 
+            data={animals}
+            renderItem={renderAnimal}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleNavigateToAnimalForm}>
+            <Text style={styles.buttonText}>Registrar nuevo animal</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -39,47 +70,46 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'stretch',
+    backgroundColor: '#f9f9f9',
+    paddingHorizontal: 10,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: '#e0e0e0',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  animalName: {
+    fontSize: 18,
+    flex: 0.8,
+    marginRight: 10,
   },
-  textContainer: {
-    width: '80%',
+  detailButtonContainer: {
+    backgroundColor: '#2196F3',
+    padding: 5,
+    borderRadius: 5,
+    flex: 0.2,
   },
-  text: {
+  detailButtonText: {
+    color: 'white',
     fontSize: 16,
-    textAlign: 'center',
   },
   button: {
+    position: 'absolute',
+    bottom: 20,
     backgroundColor: '#2196F3',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 20,
     width: '80%',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  buttonInfo: {
-    backgroundColor: 'green',
-    padding: 10,
-    borderRadius: 5,
-    width: '80%',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  goBackButton: {
-    backgroundColor: '#f44336',
-    padding: 10,
-    borderRadius: 5,
-    width: '80%',
-    alignItems: 'center',
-    marginTop: 20,
+    alignSelf: 'center',
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
