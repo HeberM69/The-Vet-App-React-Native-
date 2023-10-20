@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { db, registerUser, addUserToFirestore } from './Firebase'; // Asegúrate de importar addUserToFirestore
 
@@ -35,39 +35,41 @@ const Register = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>Registro de usuario</Text>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          value={email}
-          onChangeText={handleEmail}
-          placeholder="Correo electrónico"
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          secureTextEntry={true}
-          value={password}
-          onChangeText={handlePassword}
-          placeholder="Contraseña"
-          style={styles.input}
-        />
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarme</Text>
-      </TouchableOpacity>
-      <View style={styles.loginContainer}>
-        <Text style={styles.loginText}>
-          ¿Ya tienes una cuenta creada? {' '}
-          <Text style={styles.loginLink} onPress={goToLogin}>
-          Inicia sesión
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.title}>Registro de usuario</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            value={email}
+            onChangeText={handleEmail}
+            placeholder="Correo electrónico"
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            secureTextEntry={true}
+            value={password}
+            onChangeText={handlePassword}
+            placeholder="Contraseña"
+            style={styles.input}
+          />
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Registrarme</Text>
+        </TouchableOpacity>
+        <View style={styles.loginContainer}>
+          <Text style={styles.loginText}>
+            ¿Ya tienes una cuenta creada? {' '}
+            <Text style={styles.loginLink} onPress={goToLogin}>
+              Inicia sesión
+            </Text>
           </Text>
-        </Text>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

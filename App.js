@@ -17,11 +17,11 @@ function App() {
     <AuthProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="AnimalForm" component={AnimalForm} />
-          <Stack.Screen name="AnimalInformation" component={AnimalInfo} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: true }} />
+          <Stack.Screen name="AnimalForm" component={AnimalForm} options={{ headerShown: false }} />
+          <Stack.Screen name="AnimalInformation" component={AnimalInfo} options={{ headerShown: true }} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

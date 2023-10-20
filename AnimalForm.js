@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { addAnimalToFirestore } from './Firebase';
 
 const Home = ({ navigation }) => {
@@ -40,44 +40,46 @@ const Home = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {registering ? (
-        <ActivityIndicator size="large" color="#2196F3" />
-      ) : (
-        <>
-          <Text style={styles.title}>Registro de animales</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={name}
-              onChangeText={handleNameChange}
-              placeholder="Nombre"
-              style={styles.input}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={age}
-              onChangeText={handleAgeChange}
-              placeholder="Edad"
-              style={styles.input}
-              keyboardType="numeric"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={weight}
-              onChangeText={handleWeightChange}
-              placeholder="Peso (kg)"
-              style={styles.input}
-              keyboardType="numeric"
-            />
-          </View>
-          <TouchableOpacity style={styles.button} onPress={handleRegister}>
-            <Text style={styles.buttonText}>Registrar animal</Text>
-          </TouchableOpacity>
-        </>
-      )}
-    </View>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        {registering ? (
+          <ActivityIndicator size="large" color="#2196F3" />
+        ) : (
+          <>
+            <Text style={styles.title}>Registro de animales</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={name}
+                onChangeText={handleNameChange}
+                placeholder="Nombre"
+                style={styles.input}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={age}
+                onChangeText={handleAgeChange}
+                placeholder="Edad"
+                style={styles.input}
+                keyboardType="numeric"
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={weight}
+                onChangeText={handleWeightChange}
+                placeholder="Peso (kg)"
+                style={styles.input}
+                keyboardType="numeric"
+              />
+            </View>
+            <TouchableOpacity style={styles.button} onPress={handleRegister}>
+              <Text style={styles.buttonText}>Registrar animal</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

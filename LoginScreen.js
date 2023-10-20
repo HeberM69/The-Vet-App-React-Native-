@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { loginUser } from './Firebase';
 
@@ -34,39 +34,41 @@ const Login = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>Inicio de sesión</Text>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          value={email}
-          onChangeText={handleEmail}
-          placeholder="Correo electrónico"
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          secureTextEntry={true}
-          value={password}
-          onChangeText={handlePassword}
-          placeholder="Contraseña"
-          style={styles.input}
-        />
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
-      </TouchableOpacity>
-      <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>
-          ¿Aún no tienes una cuenta?{' '}
-          <Text style={styles.registerLink} onPress={goToRegister}>
-            Regístrate aquí
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.title}>Inicio de sesión</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            value={email}
+            onChangeText={handleEmail}
+            placeholder="Correo electrónico"
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            secureTextEntry={true}
+            value={password}
+            onChangeText={handlePassword}
+            placeholder="Contraseña"
+            style={styles.input}
+          />
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        </TouchableOpacity>
+        <View style={styles.registerContainer}>
+          <Text style={styles.registerText}>
+            ¿Aún no tienes una cuenta?{' '}
+            <Text style={styles.registerLink} onPress={goToRegister}>
+              Regístrate aquí
+            </Text>
           </Text>
-        </Text>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
